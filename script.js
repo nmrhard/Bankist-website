@@ -1,12 +1,14 @@
 'use strict';
 
-///////////////////////////////////////
-// Modal window
-
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+const btnScrollTo = document.querySelector('.btn--scroll-to');
+const section1 = document.querySelector('#section--1');
+
+///////////////////////////////////////
+// Modal window
 
 const openModal = function (evt) {
   evt.preventDefault();
@@ -32,15 +34,18 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-const btnScrollTo = document.querySelector('.btn--scroll-to');
-const section1 = document.querySelector('#section--1');
+document.querySelector('.nav__links').addEventListener('click', function(evt) {
+  evt.preventDefault();
 
-btnScrollTo.addEventListener('click', function() {
-  const s1coords = section1.getBoundingClientRect();
+  if (evt.target.classList.contains('nav__link')) {
+    const id = evt.target.getAttribute('href');
+    const section = document.querySelector(id);
 
-  window.scrollTo({
-    left: s1coords.left + window.pageXOffset, 
-    top: s1coords.top + window.pageYOffset,
-    behavior: 'smooth'
-  })
-});
+    window.scrollTo({
+      left: section.offsetLeft + window.pageXOffset, 
+      top: section.offsetTop + window.pageYOffset,
+      behavior: 'smooth'
+    })
+  }
+})
+
