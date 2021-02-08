@@ -163,3 +163,81 @@ const imgObserver = new IntersectionObserver(imgLoad, {
 imgTargets.forEach(img => {
   imgObserver.observe(img);
 });
+
+//Slider
+const slider = function() {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
+
+  let currentSlide = 0;
+  const maxSlide = slides.length - 1;
+
+  const createDots = function() {
+    slides.forEach((_, i) => {
+      dotContainer.insertAdjacentHTML('beforeend',
+      `<button class="dots__dot" data-slide="${i}"></button>`
+      )
+    })
+  }
+
+  const activeDot = function(slide) {
+    document.querySelectorAll('.dots__dot').forEach(dot => {
+      dot.classList.remove('dots__dot--active');
+    });
+    document.querySelector(`.dots__dot[data-slide="${slide}"]`).classList.add('dots__dot--active');
+  }
+
+  const goToSlide = function(s) {
+    slides.forEach((slide, i) => {
+      slide.style.transform = `translateX(${100 * (i - s)}%)`;
+    });
+  }
+
+  const nextSlide = function() {
+    if (currentSlide === maxSlide) {
+      currentSlide = 0;
+    } else {
+      currentSlide++;
+    }
+
+    goToSlide(currentSlide);
+    activeDot(currentSlide);
+  }
+
+  const prevSlide = function() {
+    if (currentSlide === 0) {
+      currentSlide = maxSlide;
+    } else {
+      currentSlide--;
+    }
+
+    goToSlide(currentSlide);
+    activeDot(currentSlide);
+  }
+
+  const init = function() {
+    createDots();
+    goToSlide(0);
+    activeDot(0);
+  }
+
+  init();
+
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', function(evt) {
+    if (evt.key === "ArrowLeft") prevSlide();
+    if (evt.key === "ArrowRight") nextSlide();
+  })
+
+  dotContainer.addEventListener('click', function(evt) {
+    const {slide}  = evt.target.dataset;
+    goToSlide(slide);
+    activeDot(slide);
+  });
+}
+
+slider();
